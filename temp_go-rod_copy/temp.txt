@@ -1,0 +1,102 @@
+cppreference.com
+
+创建账户
+页面
+讨论
+变换
+查看
+编辑
+历史
+C 标准库标头
+
+ C 标准库头
+C 标准库的接口由下列标头的汇集定义。
+
+<assert.h>	条件编译宏，将参数与零比较
+<complex.h> (C99 起)	复数算术
+<ctype.h>	用来确定包含于字符数据中的类型的函数
+<errno.h>	报告错误条件的宏
+<fenv.h> (C99 起)	浮点数环境
+<float.h>	浮点数类型的极限
+<inttypes.h> (C99 起)	整数类型的格式转换
+<iso646.h> (C95 起)	运算符的替代写法
+<limits.h>	整数类型的范围
+<locale.h>	本地化工具
+<math.h>	常用数学函数
+<setjmp.h>	非局部跳转
+<signal.h>	信号处理
+<stdalign.h> (C11 起)(C23 弃用)	alignas 与 alignof 便利宏
+<stdarg.h>	可变参数
+<stdatomic.h> (C11 起)	原子操作
+<stdbit.h> (C23 起)	处理各类型的字节和位表示的宏
+<stdbool.h> (C99 起)(C23 弃用)	布尔类型的宏
+<stdckdint.h> (C23 起)	实施带检查整数算术的宏
+<stddef.h>	常用宏定义
+<stdint.h> (C99 起)	定宽整数类型
+<stdio.h>	输入/输出
+<stdlib.h>	通用工具：内存管理、程序工具、字符串转换、随机数、算法
+<stdmchar.h> (since C29)	文本转码
+<stdnoreturn.h> (C11 起)(C23 弃用)	noreturn 便利宏
+<string.h>	字符串处理
+<tgmath.h> (C99 起)	泛型数学（包装 math.h 和 complex.h 的宏）
+<threads.h> (C11 起)	线程库
+<time.h>	时间/日期工具
+<uchar.h> (C11 起)	UTF-16 和 UTF-32 字符工具
+<wchar.h> (C95 起)	扩展多字节和宽字符工具
+<wctype.h> (C95 起)	用来确定包含于宽字符数据中的类型的函数
+功能特性测试宏 (C23 起)
+从 C23 起，相应标头中定义了功能特性测试宏。注意，并非所有标头都含有这种宏。
+
+#	标头	宏名	值
+1	<assert.h>	__STDC_VERSION_ASSERT_H__	202311L
+2	<complex.h>	__STDC_VERSION_COMPLEX_H__	202311L
+3	<ctype.h>	不适用
+4	<errno.h>	不适用
+5	<fenv.h>	__STDC_VERSION_FENV_H__	202311L
+6	<float.h>	__STDC_VERSION_FLOAT_H__	202311L
+7	<inttypes.h>	__STDC_VERSION_INTTYPES_H__	202311L
+8	<iso646.h>	不适用
+9	<limits.h>	__STDC_VERSION_LIMITS_H__	202311L
+10	<locale.h>	不适用
+11	<math.h>	__STDC_VERSION_MATH_H__	202311L
+12	<setjmp.h>	__STDC_VERSION_SETJMP_H__	202311L
+13	<signal.h>	不适用
+14	<stdalign.h>	不适用
+15	<stdarg.h>	__STDC_VERSION_STDARG_H__	202311L
+16	<stdatomic.h>	__STDC_VERSION_STDATOMIC_H__	202311L
+17	<stdbit.h>	__STDC_VERSION_STDBIT_H__	202311L
+18	<stdbool.h>	不适用
+19	<stdckdint.h>	__STDC_VERSION_STDCKDINT_H__	202311L
+20	<stddef.h>	__STDC_VERSION_STDDEF_H__	202311L
+21	<stdint.h>	__STDC_VERSION_STDINT_H__	202311L
+22	<stdio.h>	__STDC_VERSION_STDIO_H__	202311L
+23	<stdlib.h>	__STDC_VERSION_STDLIB_H__	202311L
+24	<stdmchar.h>	__STDC_VERSION_STDMCHAR_H__	2029??L
+25	<stdnoreturn.h>	不适用
+26	<string.h>	__STDC_VERSION_STRING_H__	202311L
+27	<tgmath.h>	__STDC_VERSION_TGMATH_H__	202311L
+28	<threads.h>	不适用
+29	<time.h>	__STDC_VERSION_TIME_H__	202311L
+30	<uchar.h>	__STDC_VERSION_UCHAR_H__	202311L
+31	<wchar.h>	__STDC_VERSION_WCHAR_H__	202311L
+32	<wctype.h>	不适用
+引用
+C23 标准（ISO/IEC 9899:2024）：
+7.1.2 Standard headers
+C17 标准（ISO/IEC 9899:2018）：
+7.1.2 Standard headers （第 131-132 页）
+C11 标准（ISO/IEC 9899:2011）：
+7.1.2 Standard headers （第 181-182 页）
+C99 标准（ISO/IEC 9899:1999）：
+7.1.2 Standard headers （第 165 页）
+C89/C90 标准（ISO/IEC 9899:1990）：
+4.1.2 Standard headers
+参阅
+C++ 标准库标头的 C++ 文档
+首页社区主页新闻动态最近更改随机页面帮助
+链入页面相关更改上传文件特殊页面打印版本永久链接页面信息
+其他语言
+العربيةČeskyDeutschEnglishEspañolFrançaisItaliano日本語한국어PolskiPortuguêsРусскийTürkçe
+本页面最后修改于2025年2月10日 (星期一) 20:10。
+隐私政策 关于cppreference.com 免责声明
+Powered by MediaWiki Powered by GeSHi Hosted by Tiger Technologies
