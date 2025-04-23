@@ -1,10 +1,18 @@
 package pg
 
 import (
+	"cppreference/contants"
+	"cppreference/js"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/go-rod/rod"
 	"github.com/go-rod/rod/lib/proto"
+	"io/fs"
+	"os"
+	"path/filepath"
+	"strings"
+	"time"
 )
 
 type Itu struct {
@@ -18,47 +26,21 @@ type Header struct {
 	I2ItuS map[string][]Itu
 }
 
-type Hn2Header map[string][]Header
-type Hn2Url map[string]string
+type HInfo struct {
+	Header     string `json:"header"`
+	FullHeader string `json:"fullHeader"`
+	Url        string `json:"url"`
+}
 
-func GetAllHeader(page *rod.Page) (hn2Url Hn2Url, err error) {
+type Hn2Header map[string][]Header
+type Hn2HInfo map[string]HInfo
+
+func GetAllHeader(page *rod.Page) (hn2HInfo Hn2HInfo, err error) {
 	page.MustNavigate("https://zh.cppreference.com/w/c/header")
 	page.MustWaitLoad()
 	var result *proto.RuntimeRemoteObject
-	result, err = page.Eval(`() => {
-	const pattern = /<([^<>./]+)\.h>/;
-    const table = document.querySelector('table.t-dsc-begin');
-    const linkData = [];
-    // 用于记录已经存在的 header
-    const existingHeaders = {};
-    if (table) {
-        // 获取表格的所有行
-        const rows = table.querySelectorAll('tr.t-dsc');
-        rows.forEach(row => {
-            // 获取第一列的所有链接
-            const firstColumn = row.querySelector('td:first-child');
-            const links = firstColumn.querySelectorAll('a');
-            links.forEach(link => {
-                const fullHeader = link.textContent.trim();
-                const headerMatch  = fullHeader.match(pattern);
-                const url = link.href;
-                const header = headerMatch ? headerMatch[1] : "";
-                if (!existingHeaders[header]) {
-                    linkData.push({
-                        header: header,
-                        fullHeader: fullHeader,
-                        url: url
-                    });
-                    // 标记该 header 已经存在
-                    existingHeaders[header] = true;
-                }                
-            });
-        });
-        // 打印结果
-        console.log(linkData);
-    }
-    return linkData
-	}`)
+
+	result, err = page.Eval(js.InHeaderPageGetAllHeaderInfoJs)
 
 	if err != nil {
 		return nil, err
@@ -69,26 +51,102 @@ func GetAllHeader(page *rod.Page) (hn2Url Hn2Url, err error) {
 		return nil, fmt.Errorf("failed to marshal result: %v", err)
 	}
 
-	// 定义一个结构体来解析 JSON 数据
-	var data []struct {
-		Header     string `json:"header"`
-		FullHeader string `json:"fullHeader"`
-		Url        string `json:"url"`
-	}
+	// 定义一个结构体切片来解析 JSON 数据
+	var data []HInfo
 
 	// 将 JSON 数据反序列化到结构体中
 	err = json.Unmarshal(jsonBytes, &data)
 	if err != nil {
 		return nil, fmt.Errorf("failed to unmarshal result: %v", err)
 	}
-	hn2Url = make(Hn2Url)
+	hn2HInfo = make(Hn2HInfo)
 	for _, st := range data {
-		hn2Url[st.Header] = st.Url
+		hn2HInfo[st.Header] = st
 	}
 
-	return hn2Url, nil
+	return hn2HInfo, nil
 }
 
 func GetHeaderIdentifier(page *rod.Page, url string) {
-	
+
+}
+
+var InitSpeacialHeaderMdContent = `
++++
+title = "%s"
+date = %s
+weight = %d
+type = "docs"
+description = "%s"
+isCJKLanguage = true
+draft = false
+
++++
+`
+
+func InitMdFile(index int, hInfo HInfo, page *rod.Page) (err error) {
+
+	page.MustNavigate(hInfo.Url)
+	page.MustWaitLoad()
+
+	// 获取h1标签的内容
+	h1Content := page.MustElement("#firstHeading").MustText()
+	h1Content = strings.TrimSpace(strings.Replace(h1Content, "标准库标头", "", -1))
+
+	err = os.MkdirAll(filepath.Join(contants.OutputFolderName, contants.CStdFolderName), 0777)
+	if err != nil {
+		return fmt.Errorf("无法创建%s目录：%v\n", filepath.Join(contants.OutputFolderName, contants.CStdFolderName), err)
+	}
+
+	newMdFp := filepath.Join(contants.OutputFolderName, contants.CStdFolderName, hInfo.Header)
+	var newMd *os.File
+	_, err1 := os.Stat(newMdFp)
+	// 当文件不存在的情况下，新建文件并初始化该文件
+	if err1 != nil && errors.Is(err1, fs.ErrNotExist) {
+		//fmt.Println("err=", err1)
+		newMd, err = os.OpenFile(newMdFp, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
+		if err != nil {
+			return fmt.Errorf("创建文件 %s 时出错: %w", newMdFp, err)
+		}
+		defer newMd.Close()
+		_, err = newMd.WriteString(fmt.Sprintf(`
++++
+title = "%s"
+date = %s
+weight = %d
+type = "docs"
+description = "%s"
+isCJKLanguage = true
+draft = false
+
++++
+`, h1Content, time.Now().Format(time.RFC3339), index*10, ""))
+		if err != nil {
+			return fmt.Errorf("写入文件时出错: %w", err)
+		}
+		// 初始化文件内容
+
+	}
+	//
+	//_, err := os.Stat(newMdFp)
+	//if err == nil {
+	//	// 文件存在
+	//	fmt.Println("文件已存在:", filePath)
+	//}
+	//
+	//errors.Is(err，fs.ErrNotExist)
+
+	//if !os.IsNotExist(err) {
+	//	// 出现了其他错误
+	//	return err
+	//}
+	//
+	//// 文件不存在，尝试创建
+	//file, err := os.Create(filePath)
+	//if err != nil {
+	//	return err
+	//}
+	//defer file.Close()
+	return
+
 }

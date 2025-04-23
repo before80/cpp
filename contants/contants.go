@@ -10,6 +10,9 @@ const (
 	// log 目录下的文件
 	LogFileNamePrefix = "app_log"
 
+	// output目录下的子目录
+	CStdFolderName = "std"
+
 	// config 目录下的文件
 	DefaultFileName = "Default.toml"
 
