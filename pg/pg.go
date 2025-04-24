@@ -247,6 +247,9 @@ func insertSubmenus(typ string, ids []string, id2IdInfo map[string]IdInfo, fp st
 					line = sps[0]
 				}
 				line = strings.TrimSpace(line)
+				if strings.HasPrefix(id, "__") {
+					line = strings.Trim(line, "`")
+				}
 
 				if id == line {
 					hadExisted = true
@@ -266,7 +269,12 @@ func insertSubmenus(typ string, ids []string, id2IdInfo map[string]IdInfo, fp st
 		if !hadExisted {
 			newTotalLines = []string{}
 			newLines := make([]string, 0)
-			newLines = append(newLines, fmt.Sprintf("### %s\n", id))
+			if strings.HasPrefix(id, "__") {
+				newLines = append(newLines, fmt.Sprintf("### `%s`\n", id))
+			} else {
+				newLines = append(newLines, fmt.Sprintf("### %s\n", id))
+			}
+
 			url = strings.TrimSpace(idInfo.Url)
 			if url != "" {
 				url = fmt.Sprintf(`[%s](%s)`, url, url)

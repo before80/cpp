@@ -57,13 +57,13 @@ func main() {
 	for index, hn := range hns {
 		hInfo := hn2HInfo[hn]
 		_ = hn
-		//if !(hn == "assert" || hn == "complex" || hn == "ctype" || hn == "errno" || hn == "fenv") {
-		//	continue
-		//}
-
-		if hn != "stdckdint" {
+		if !(hn == "stdio") {
 			continue
 		}
+
+		//if hn != "stdckdint" {
+		//	continue
+		//}
 
 		err = pg.InitSpecialHeaderMdFile(index, hInfo, page)
 		if err != nil {

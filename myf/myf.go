@@ -1,6 +1,7 @@
 package myf
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
 	"os"
@@ -138,6 +139,9 @@ func ReplaceMarkdownFileContent(filePath string) (bool, error) {
 		{regexp.MustCompile("### 缺陷报告"), "**缺陷报告**"},
 		{regexp.MustCompile("### 外部链接"), "**外部链接**"},
 		{regexp.MustCompile("### 展开"), "**展开**"},
+		{regexp.MustCompile("### 展开值"), "**展开值**"},
+		{regexp.MustCompile("### 复杂度"), "**复杂度**"},
+		{regexp.MustCompile("### 文件访问标记"), "**文件访问标记**"},
 		{regexp.MustCompile("- &zeroWidthSpace; "), "  - "},
 		{regexp.MustCompile("&zeroWidthSpace;"), "​\t"},
 		{regexp.MustCompile(`### ([a-zA-Z_]+)\s*?\(C(\d+)\s*?起\)`), "### $1 <- $2+"},
@@ -226,5 +230,38 @@ func ReplaceMarkdownFileContent(filePath string) (bool, error) {
 		//fmt.Println("2")
 
 	}
+
+	// 按行判断是否有 ### 或 ## 开头的行，若有则替换这些行
+	var totalLines []string
+	file, err := os.OpenFile(filePath, os.O_RDWR, 0666)
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		totalLines = append(totalLines, scanner.Text())
+	}
+
+	for i, line := range totalLines {
+		if strings.HasPrefix(line, "### ") {
+			totalLines[i] = strings.Replace(line, "### ", "", -1)
+		}
+		if strings.HasPrefix(line, "## ") {
+			totalLines[i] = strings.Replace(line, "## ", "", -1)
+		}
+	}
+	_ = file.Truncate(0)
+	_, _ = file.Seek(0, 0)
+
+	writer := bufio.NewWriter(file)
+	for _, line := range totalLines {
+		_, err = writer.WriteString(line + "\n")
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	err = writer.Flush()
+	if err != nil {
+		panic(err)
+	}
+
 	return modified, nil
 }
