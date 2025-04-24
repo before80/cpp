@@ -12,6 +12,7 @@
             rows.forEach(row => {
                 // 获取第一列的所有链接
                 const firstColumn = row.querySelector('td:first-child');
+                const secondColumn = row.querySelector('td:nth-child(2)');
                 const links = firstColumn.querySelectorAll('a');
                 links.forEach(link => {
                     const fullHeader = link.textContent.trim();
@@ -22,7 +23,8 @@
                         linkData.push({
                             header: header,
                             fullHeader: fullHeader,
-                            url: url
+                            url: url,
+                            desc: secondColumn.textContent.trim(),
                         });
                         // 标记该 header 已经存在
                         existingHeaders[header] = true;

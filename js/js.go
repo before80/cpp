@@ -5,8 +5,8 @@ import _ "embed"
 //go:embed InIdentifierPageRemoveAndReplace.js
 var InIdentifierPageRemoveAndReplaceJs string
 
-//go:embed InHeaderIntroPageGetIdentifier.js
-var InHeaderIntroPageGetIdentifierJs string
+//go:embed InSomeoneHeaderIntroPageGetAllIdentifierInfo.js
+var InSomeoneHeaderIntroPageGetAllIdentifierInfoJs string
 
-//go:embed InHeaderPageGetAllHeaderInfo.js
-var InHeaderPageGetAllHeaderInfoJs string
+//go:embed InHeadersPageGetAllHeaderInfo.js
+var InHeadersPageGetAllHeaderInfoJs string

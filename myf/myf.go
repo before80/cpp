@@ -136,6 +136,7 @@ func ReplaceMarkdownFileContent(filePath string) (bool, error) {
 		{regexp.MustCompile("### 错误处理"), "**错误处理**"},
 		{regexp.MustCompile("### 可能的实现"), "**可能的实现**"},
 		{regexp.MustCompile("### 缺陷报告"), "**缺陷报告**"},
+		{regexp.MustCompile("### 外部链接"), "**外部链接**"},
 		{regexp.MustCompile("- &zeroWidthSpace; "), "  - "},
 		{regexp.MustCompile("&zeroWidthSpace;"), "​\t"},
 		{regexp.MustCompile(`### ([a-zA-Z_]+)\s*?\(C(\d+)\s*?起\)`), "### $1 <- $2+"},
@@ -216,12 +217,12 @@ func ReplaceMarkdownFileContent(filePath string) (bool, error) {
 	}
 
 	if modified {
-		err = os.WriteFile(filePath, []byte(newContent), 0644)
-		fmt.Println("1")
+		err = os.WriteFile(filePath, []byte(newContent), 0666)
+		//fmt.Println("1")
 		if err != nil {
 			return false, err
 		}
-		fmt.Println("2")
+		//fmt.Println("2")
 
 	}
 	return modified, nil

@@ -368,10 +368,10 @@ replaceSpanSourceC();
 replaceDlToUl();
 replaceXuHao();
 replaceP();
-replaceTableContentAddBr();
 replaceNotice();
 replaceTRevBeginTable();
 replaceTableAddVersionAfterIdentifier();
+replaceTableContentAddBr();
 
 // 转义字符为正则表达式中可以直接使用的字符
 function quoteMeta(str) {
