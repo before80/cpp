@@ -137,6 +137,7 @@ func ReplaceMarkdownFileContent(filePath string) (bool, error) {
 		{regexp.MustCompile("### 可能的实现"), "**可能的实现**"},
 		{regexp.MustCompile("### 缺陷报告"), "**缺陷报告**"},
 		{regexp.MustCompile("### 外部链接"), "**外部链接**"},
+		{regexp.MustCompile("### 展开"), "**展开**"},
 		{regexp.MustCompile("- &zeroWidthSpace; "), "  - "},
 		{regexp.MustCompile("&zeroWidthSpace;"), "​\t"},
 		{regexp.MustCompile(`### ([a-zA-Z_]+)\s*?\(C(\d+)\s*?起\)`), "### $1 <- $2+"},

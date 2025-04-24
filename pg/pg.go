@@ -331,7 +331,9 @@ func InitSpecialHeaderMdFile(index int, hInfo HInfo, page *rod.Page) (err error)
 			err = fmt.Errorf("InitSpecialHeaderMdFile 在处理%s时遇到panic：%v", hInfo.Url, r)
 		}
 	}()
+	// 打开各个头文件的介绍页，获取该头文件包含哪些标识符（类型、函数、宏、枚举）
 	page.MustNavigate(hInfo.Url)
+	//page.MustNavigate("https://en.cppreference.com/w/c/header/stdckdint")
 	page.MustWaitLoad()
 
 	// 获取h1标签的内容
@@ -400,7 +402,8 @@ func GetIdentifierData(browserHwnd win.HWND, hn string, idInfo IdInfo, page *rod
 			err = fmt.Errorf("在 GetIdentifierData 遇到panic：%v", r)
 		}
 	}()
-
+	lg.InfoToFileAndStdOut(fmt.Sprintf("idInfo.Url=%s\n", idInfo.Url))
+	//page.MustNavigate(strings.Replace(idInfo.Url, "https://en.cppreference.com", "https://zh.cppreference.com", -1))
 	page.MustNavigate(idInfo.Url)
 	page.MustWaitLoad()
 

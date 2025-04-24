@@ -52,17 +52,18 @@ func main() {
 		hns = append(hns, hn)
 	}
 	sort.Strings(hns)
-	fmt.Println(hns)
+	lg.InfoToFileAndStdOut(fmt.Sprintf("hns=%v\n", hns))
 
 	for index, hn := range hns {
 		hInfo := hn2HInfo[hn]
 		_ = hn
-		if hn == "assert" || hn == "complex" || hn == "ctype" || hn == "errno" || hn == "fenv" {
+		//if !(hn == "assert" || hn == "complex" || hn == "ctype" || hn == "errno" || hn == "fenv") {
+		//	continue
+		//}
+
+		if hn != "stdckdint" {
 			continue
 		}
-		// 打开各个头文件的介绍页，获取该头文件包含哪些标识符（类型、函数、宏、枚举）
-		page.MustNavigate(hInfo.Url)
-		page.MustWaitLoad()
 
 		err = pg.InitSpecialHeaderMdFile(index, hInfo, page)
 		if err != nil {
